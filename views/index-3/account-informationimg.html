@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1,width=device-width,user-scalable=no" />
+			<link rel="stylesheet" href="../../css/style.css" />
+			<link rel="stylesheet" href="../../css/reset.css" />
+			<link rel="stylesheet" href="../../css/layui.css" />
+			<title>证件信息</title>
+			<style>
+				header{background:#0077FF !important;}
+				header h1{color: #FFFFFF;}
+			</style>
+		</head>
+		<body>
+			<header >
+				<i onclick="window.history.back();"><img src="../../img/w-back.png"/></i>
+				<h1>证件信息</h1>
+			</header>
+			<div class="main">
+				<div class="seach-list-warp">
+
+					<div class="certificates-img">
+						<ul v-for="item in details">
+							<li>
+								<img :src="item.acc_poto1" />
+							</li>
+							<li>
+								<img :src="item.acc_poto2" />
+							</li>
+							<li>
+								<img :src="item.card_poto1" />
+							</li>
+							<li>
+								<img :src="item.card_poto2" />
+							</li>
+							<li>
+								<img :src="item.person_poto" />
+							</li>
+							<li>
+								<img src="../../img/index-bg.png" />
+							</li>
+						</ul>
+					</div>
+				</div>
+			
+			</div>
+	<script src="../../js/jquery-3.5.1.js"></script>
+	<script src="../../js/layer/layer.js"></script>
+	<script src="../../js/vue.js"></script>
+	<script type="text/javascript">
+		var vmm = new Vue({
+			el: ".main",
+			data: {
+				keywords: '',
+				details:[],
+			},
+			mounted() {
+				this.getdata()
+			},
+			methods: {
+				getdata: function() {
+					var that = this;
+					jQuery.ajax({
+						type: 'post',
+						dataType: 'json',
+						url: 'http://192.168.1.169:8484/yilian/api/withholdUserInfo',
+						success: function(res) {
+							 debugger
+							console.log(res);
+							
+							if (res.errorCode == 00000) {
+								that.details = res.data
+							}
+						},
+						error: function(res) {
+							console.log(res);
+							// layer.alert(res)
+						}
+					})
+				},
+				
+				
+			}
+		})
+	</script>
+	
+	</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1,width=device-width,user-scalable=no" />
+		<link rel="stylesheet" href="../../css/style.css" />
+		<link rel="stylesheet" href="../../css/reset.css" />
+		<title>公司管理详情</title>
+		<style>
+			header{background:#0077FF !important;}
+			header h1{color: #FFFFFF;}
+		</style>
+	</head>
+	<body>
+		<header >
+			<i onclick="window.history.back();"><img src="../../img/w-back.png"/></i>
+			<h1>信息详情</h1>
+		</header>
+		<div class="company-details">
+			<ul v-for="item in companydetails">
+				<li>
+					<span>公司名称：</span>
+					<span>{{item.org_name}}</span>
+				</li>
+				<li>
+					<span>公司地址：</span>
+					<span>{{item.address}}</span>
+				</li>
+				<li>
+					<span>负 责 人：</span>
+					<span>{{item.real_name}}</span>
+				</li>
+				<li>
+					<span>联系电话：</span>
+					<span>{{item.user_tel}}</span>
+				</li>
+				<li>
+					<span>录入时间：</span>
+					<span>{{formartDate(item.create_datetime)}}</span>
+				</li>
+			</ul>
+		</div>
+		<script src="../../js/jquery-3.5.1.js"></script>
+		<script src="../../js/vue.js"></script>
+		<script type="text/javascript">
+			var vmm = new Vue({
+				el:'.company-details',
+				data:{
+					keywords:'',
+					companydetails:{}
+					
+				},
+				created(){
+					this.getdata();
+					},
+				methods:{
+					getdata(){
+						var that = this;
+						jQuery.ajax({
+							type:'post',
+							datatype:'json',
+							async:false,
+							url:'http://192.168.1.169:8484/yilian/api/staffInfo',
+							
+							success:function(res){
+								debugger
+								// console.log(res)
+								if(res.errorCode == 00000){
+									that.companydetails= res.data
+									console.log(that.companydetails)
+								}
+							},
+							error:function(res){
+								console.log(res)
+								layer.msg(res)
+							}	
+							
+						})
+						
+					},
+						formartDate(param) {
+						 let date = new Date(param);
+						 Y = date.getFullYear() + '-';
+						 M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-';
+						 D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+						 h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+						 m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+						 s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+						 return Y + M + D + h + m + s;
+						},
+				},
+				
+				
+				
+			}) 
+		</script>
+	</body>
+</html>

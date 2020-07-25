@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1,width=device-width,user-scalable=no" />
+		<link rel="stylesheet" href="../../css/reset.css" />
+		<link rel="stylesheet" href="../../css/style.css" />
+		<style>
+			.informmation-form #form3{background: white;display: flex;flex-direction: column;width: 100%;margin-top: 10px;}
+			.informmation-form #form3 label{display: flex;padding: .5rem 0px;width: 90% ;margin: 0 auto;}
+			.informmation-form #form3 label:first-child{border-bottom: 1px solid #E6E6E6;}
+			.informmation-form #form3 label span{font-size: 1rem;width: 30%;display: block;}
+			.informmation-form #form3 label input{outline: none;-webkit-appearance: none;font-size: 1rem;}
+			.informmation-form #form3 label input::-webkit-input-placeholder{color: #777777;}
+		</style>
+		<title>机构信息录入</title>
+	</head>
+	<body>
+		<header >
+			<i onclick="window.history.back();"><img src="../../img/w-back.png"/></i>
+			<h1>机构开户</h1>
+		</header>
+		<div class="informmation-form">
+			<div id="form1">
+				<label>
+					<span>公司名称</span>
+					<input type="text"placeholder="请输入公司名称" id="company-name"/>
+				</label>
+				<label>
+					<span>公司地址</span>
+					<input type="text" placeholder="请输入公司详细地址" id="company-address"/>
+				</label>
+			</div>
+			<div id="form2">
+				<label>
+					<span>姓名</span>
+					<input type="text" placeholder="请输入公司负责人姓名" id="name"/>
+				</label>
+				<label>
+					<span>电话</span>
+					<input type="text" placeholder="请输入联系电话" id="phone" />
+				</label>
+			</div>
+			<div id="form3">
+				<label>
+					<span>用户名</span>
+					<input type="text" placeholder="请输入用户名" id="user"/>
+				</label>
+				<label>
+					<span>密码</span>
+					<input type="password" placeholder="请输入密码" id="pwd" />
+				</label>
+			</div>
+			<div class="complete">
+				<button>完成</button>
+			</div>
+		</div>
+		<script src="../../js/jquery-1.7.2.min.js"></script>
+		<script src="../../js/check.js"></script>
+		<script src="../../js/layer/layer.js"></script>
+		<script type="text/javascript">
+			
+			$('.complete').click(function(){
+				var companyname = $('#company-name').val();
+			var companyaddress = $('#company-address').val();
+			var name = $('#name').val();
+			var phone = $('#phone').val();
+			var user = $('#user').val();
+			var pwd = $('#pwd').val();
+				if(!isKong(companyname,$("#company-name").attr("placeholder"))){
+					return false;
+				}
+				if(!isKong(companyaddress,$("#company-address").attr("placeholder"))){
+					return false;
+				}
+				if(!isKong(name,$("#name").attr("placeholder"))){
+					return false;
+				}
+				if(!isKong(phone,$("#phone").attr("placeholder"))){
+					return false;
+				}
+				if(!telcheck(phone)){
+					return false;
+					
+				}
+				if(!isKong(user,$("#user").attr("placeholder"))){
+					return false;
+				}
+				if(!isKong(pwd,$("#pwd").attr("placeholder"))){
+					return false;
+				}
+				
+			})
+				
+			
+			
+			
+				
+		</script>
+	</body>
+</html>

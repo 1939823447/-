@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1,width=device-width,user-scalable=no" />
+			<link rel="stylesheet" href="../../css/style.css" />
+			<link rel="stylesheet" href="../../css/reset.css" />
+			<link rel="stylesheet" href="../../css/layui.css" />
+			<script src="../../js/jquery-3.5.1.js"></script>
+			<script src="../../js/jquery-1.11.3.min.js"></script>
+			<script src="../../js/layer/layer.js"></script>
+			<script src="../../js/vercode.js"></script>
+			<script src="../../js/gVerify.js"></script>
+			<style>
+				#verifyCanvas{width: 100%;background: white !important;}
+				.company-name{}
+				.fenqi{display: flex;width: 92%;margin: .5rem auto;padding-bottom: 20px;}
+				.fenqi span{display: block;width: 30%;}
+				.fenqi p{display:block;width: 35%;}
+				.fenqi p input{width: 10vw;text-align: center;font-size: .9rem;font-weight: bold;border-bottom: 1px solid #E6E6E6;}
+			</style>
+			<title>资料录入</title>
+	</head>
+	<body>
+		<header >
+			<i onclick="window.history.back();"><img src="../../img/w-back.png"/></i>
+			<h1>资料录入</h1>
+		</header>
+		<main class="main">
+			<div class="company-name">
+				<label class="border-bottom">
+					<span>姓名：</span>
+					<input type="text" placeholder="持卡人姓名" id="user"/>
+				</label>
+				<label class="border-bottom">
+					<span>身份证号：</span>
+					<input type="text" placeholder="请输入身份证号" id="idcard"/>
+				</label>
+				<label class="">
+					<span>手机号:</span>
+					<input type="text" placeholder="请填写银行预留手机号" id="phone" />
+				</label>
+				
+			</div>
+			
+			<div class="company-name">
+				<label class="border-bottom">
+					<span>卡号：</span>
+					<input type="number" placeholder="请输入银行卡号（仅支持储蓄卡）" id="Card_number"/>
+				</label>
+				<label class="border-bottom ">
+					<span>开户行</span>
+					<input type="text" placeholder="请输入开户行" id="card_name" />
+				</label>
+				<label class="code-warp2 border-bottom">
+					<span>短信验证:</span>
+					<input type="number" placeholder="验证码" maxlength="6" id="verCode" style="width: 40% !important;"/>
+					<input type="button" name="" id="verCodeBtn" value="获取验证码" style="width: 30% !important;" />
+				</label>
+				<label class="border-bottom ">
+					<span>金额(一次性)</span>
+					<input type="text" placeholder="请输入金额" id="money" onchange="changeipt()"/>
+				</label>
+				<div class="fenqi">
+					<span>金额(分期)</span>
+					<p>分<input type="number"  id="stages" onchange="changeipt()"  onkeyup="value=value.replace(/[^\d]/g,'')" onblur="value=value.replace(/[^\d]/g,'')" /> 期</p>
+					<p>每期<input type="number" id="elements" onchange="changeipt()" />元</p>
+				</div>
+			</div>
+			<div class="account-btn">
+				<button type="button" class="next-btn" id="next-btn" >下一步</button>
+			</div>
+		</main>
+		<script src="../../js/jquery-1.7.2.min.js"></script>
+		<script src="../../js/check.js"></script>
+		<script src="../../js/layer/layer.js"></script>
+		<script type="text/javascript">
+
+
+			function changeipt(){
+			        var money=$("#money").val();
+					var stages=$("#stages").val();
+			        var elements=$("#elements").val();
+					$('.fenqi input').c
+			       if (money!=""){			//第一个input框不为空,第二个无法输入
+			        	$("#stages").attr("disabled","disabled");
+						$("#elements").attr("disabled","disabled");
+			       }else {										//第一个input框为空,第二个移除disable    
+					   $("#stages").removeAttr("disabled");
+					   $("#elements").removeAttr("disabled")
+				   }
+				   if(stages!=""||elements!=""){
+					   $("#money").attr("disabled","disabled");
+			       }else {
+			           $("#money").removeAttr("disabled")
+			       }
+			    }
+			    //初始化
+			    $(function () {
+			     changeipt()
+			    });
+			$('.next-btn').click(function(){
+				var user = $('#user').val();
+				var idcard = $('#idcard').val();
+				var card_name = $('#card_name').val();
+				var phone = $('#phone').val();
+				var verCode = $('#verCode').val();
+				var Card_number = $('#Card_number').val();
+				var money = $('#money').val();
+				
+				if(!isKong(user,$('#user').attr('placeholder'))){
+					return false
+				}
+				 if(!isKong(idcard,$('#idcard').attr('placeholder'))){
+					return false
+				} 
+				if(!Idcard(idcard)){
+					return false
+				}
+				if(!isKong(phone,$('#phone').attr('placeholder'))){
+					return false
+				}
+				if(!telcheck(phone)){
+					return false
+				}
+				if(!isKong(Card_number,$('#Card_number').attr('placeholder'))){
+					return false
+				}				
+				if(!regTest(Card_number)){
+					return false
+				}
+				
+				if(!isKong(card_name,$('#card_name').attr('placeholder'))){
+					return false
+				}
+				
+				 if(!isKong(verCode,$('#verCode').attr('placeholder'))){
+					return false
+				} 
+				if(!isKong(money,$('#money').attr('placeholder'))){
+					return false
+				}  				
+				if(!moneyreg(money)){
+					return false
+				}
+				
+				
+				
+				$.ajax({
+					url:'http://192.168.1.169:8383/yilian/api/uploadFile',
+					type:'post',
+					dataType:'',
+					data:{
+						real_name:user,
+						user_card:idcard,
+						bank_account:Card_number,
+						user_tel: phone,
+					},
+					success:function(res){
+						// debugger
+						console.log(res);
+						if(res.errorCode == 00000){
+							layer.msg('操作成功');
+							window.location.href="Upload-ID.html"; 
+						}
+						
+						
+					},
+					error:function(res){
+						console.log(res);
+						 layer.msg(res);
+					}										
+				})
+					
+				
+				
+				
+			})
+		</script>
+	</body>
+</html>
